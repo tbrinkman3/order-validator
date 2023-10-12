@@ -1,7 +1,41 @@
+import SchemaGenerator from '../src/schemaGenerator'
+import { KiboOrder } from '../src/types'
 
-import {JSONSchemaType} from "ajv"
+const data:KiboOrder = {
+  "items": [
+      {
+          "quantity": 1,
+          "product": {
+              "productCode": "UPC99"
+          }
+      }
+  ],
+  "billingInfo": {
+      "billingContact": {
+          "email": "6767-9947@yopmail.com"
+      }
+  },
+  "isImport": true,
+  "fulfillmentInfo": {
+      "fulfillmentContact": {
+          "firstName": "Bob",
+          "lastNameOrSurname": "Ross",
+          "phoneNumbers": {
+              "home": "7707707700"
+          },
+          "address": {
+              "address1": "111 Paintbrush Ln",
+              "cityOrTown": "Atlanta",
+              "stateOrProvince": "GA",
+              "postalOrZipCode": "30534",
+              "countryCode": "US"
+          }
+      },
+      "shippingMethodCode": "fedex_FEDEX_GROUND"
+  }
+}
 
-const BasicOrderSchema: JSONSchemaType<BasicOrder> = {
+const mockSchema = {
   type: "object",
   properties: {
     items: {type: "array", items: {
@@ -19,6 +53,21 @@ const BasicOrderSchema: JSONSchemaType<BasicOrder> = {
       },
       required: ["quantity", "product"],
     }},
+    billingInfo: {
+      type: "object",
+      properties: {
+        billingContact: {
+          type: "object",
+          properties: {
+            email: {type: "string"}
+          },
+          required: ["email"],
+          additionalProperties: true
+        }
+      },
+      required: ["billingContact"],
+      additionalProperties: true
+    },
     isImport: {type: "boolean"},
     fulfillmentInfo: {
       type: "object",
@@ -57,73 +106,17 @@ const BasicOrderSchema: JSONSchemaType<BasicOrder> = {
       required: ["fulfillmentContact", "shippingMethodCode"],
       additionalProperties: true
     },
-    billingInfo: {
-      type: "object",
-      properties: {
-        billingContact: {
-          type: "object",
-          properties: {
-            email: {type: "string"}
-          },
-          required: ["email"],
-          additionalProperties: true
-        }
-      },
-      required: ["billingContact"]
-    }
+
   },
-  required: [ "isImport", "items", "billingInfo", "fulfillmentInfo"],
+  required: [ "items", "billingInfo", "isImport", "fulfillmentInfo"],
   additionalProperties: true
 }
+describe('SchemaGenerator Tests', () => {
+  it('Generates accurate schema', () => {
+    const generator = new SchemaGenerator(data);
 
-export default BasicOrderSchema
+    const generatedSchema = generator.generateSchema()
 
-
-
-export interface BasicOrder {
-  items:           Item[];
-  billingInfo:     BillingInfo;
-  isImport:        boolean;
-  fulfillmentInfo: FulfillmentInfo;
-}
-
-export interface BillingInfo {
-  billingContact: BillingContact;
-}
-
-export interface BillingContact {
-  email: string;
-}
-
-export interface FulfillmentInfo {
-  fulfillmentContact: FulfillmentContact;
-  shippingMethodCode: string;
-}
-
-export interface FulfillmentContact {
-  firstName:         string;
-  lastNameOrSurname: string;
-  phoneNumbers:      PhoneNumbers;
-  address:           Address;
-}
-
-export interface Address {
-  address1:        string;
-  cityOrTown:      string;
-  stateOrProvince: string;
-  postalOrZipCode: string;
-  countryCode:     string;
-}
-
-export interface PhoneNumbers {
-  home: string;
-}
-
-export interface Item {
-  quantity: number;
-  product:  Product;
-}
-
-export interface Product {
-  productCode: string;
-}
+    expect(JSON.stringify(generatedSchema, null, 2)).toEqual(JSON.stringify(mockSchema, null, 2))
+  })
+})
