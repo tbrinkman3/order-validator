@@ -1,5 +1,7 @@
 import { KiboOrder } from "./types";
 
+
+//TODO: what would these types look like
 type SchemaItem = {
   type: string;
   additionalProperties: boolean;
@@ -8,6 +10,7 @@ type SchemaItem = {
   items?: any;
 }
 
+//TODO: how to define this type?
 function generateSchema(json:any, key?:string){
 
   if(typeof json == 'object' && !Array.isArray(json)) {

@@ -1,2 +1,2 @@
 export {default as BasicOrderSchema} from './basic'
-export {default as STHOrderSchema} from './STHOrder'
+export {default as STHOrderSchema} from './sthOrder'

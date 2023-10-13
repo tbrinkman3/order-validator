@@ -1,39 +1,5 @@
 import SchemaGenerator from '../src/schemaGenerator'
-import { KiboOrder } from '../src/types'
-
-const data:KiboOrder = {
-  "items": [
-      {
-          "quantity": 1,
-          "product": {
-              "productCode": "UPC99"
-          }
-      }
-  ],
-  "billingInfo": {
-      "billingContact": {
-          "email": "6767-9947@yopmail.com"
-      }
-  },
-  "isImport": true,
-  "fulfillmentInfo": {
-      "fulfillmentContact": {
-          "firstName": "Bob",
-          "lastNameOrSurname": "Ross",
-          "phoneNumbers": {
-              "home": "7707707700"
-          },
-          "address": {
-              "address1": "111 Paintbrush Ln",
-              "cityOrTown": "Atlanta",
-              "stateOrProvince": "GA",
-              "postalOrZipCode": "30534",
-              "countryCode": "US"
-          }
-      },
-      "shippingMethodCode": "fedex_FEDEX_GROUND"
-  }
-}
+import { mockOrders } from '../__mocks__/mockOrders'
 
 const mockSchema = {
   type: "object",
@@ -113,7 +79,7 @@ const mockSchema = {
 }
 describe('SchemaGenerator Tests', () => {
   it('Generates accurate schema', () => {
-    const generator = new SchemaGenerator(data);
+    const generator = new SchemaGenerator(mockOrders.basicOrder);
 
     const generatedSchema = generator.generateSchema()
 

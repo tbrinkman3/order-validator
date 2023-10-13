@@ -1,13 +1,9 @@
-import Ajv from "ajv"
-import * as Schemas from "./schema"
+import CreateOrderAnalyzer from "./createOrderAnalyzer"
 import { KiboOrder } from "./types"
-import SchemaGenerator from "./schemaGenerator"
-const ajv = new Ajv()
 
-// validate is a type guard for MyData - type is inferred from schema type
-//const validate = ajv.compile(Schemas.BasicOrderSchema)
+import * as Schemas from './schema'
 
-const data:KiboOrder = {
+const orderJSON:KiboOrder = {
   "items": [
       {
           "quantity": 1,
@@ -40,16 +36,9 @@ const data:KiboOrder = {
       "shippingMethodCode": "fedex_FEDEX_GROUND"
   }
 }
+const analyzer = new CreateOrderAnalyzer(orderJSON)
 
-const generator = new SchemaGenerator(data)
+analyzer.analyze(Schemas.BasicOrderSchema)
 
-generator.generateSchema()
-
-// if (validate(data)) {
-//   // data is MyData here
-//   console.log('ALL GOOD')
-// } else {
-//   console.log(validate.errors)
-// }
 
 
