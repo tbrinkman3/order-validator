@@ -1,13 +1,9 @@
-import CreateOrderAnalyzer from "./createOrderAnalyzer"
-import { KiboOrder } from "./types"
-import { ValidatorConfiguration } from "./types/config"
-
-const orderJSON:KiboOrder = {
+{
   "items": [
       {
           "quantity": 1,
           "product": {
-              "productCode": "UPC99",
+              "productCode": "UPC99"
           }
       }
   ],
@@ -35,21 +31,3 @@ const orderJSON:KiboOrder = {
       "shippingMethodCode": "fedex_FEDEX_GROUND"
   }
 }
-
-function createConfig(): ValidatorConfiguration {
-  return {
-    orderType: "BASIC"
-  }
-}
-
-function main() {
-  const analyzer = new CreateOrderAnalyzer(orderJSON, createConfig())
-
-  analyzer.analyze()
-
-}
-
-main()
-
-
-
